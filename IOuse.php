@@ -1,6 +1,6 @@
 <?php
   funtion load($class){
-    $class .".php";
+    include($class .".php");
   }
   load('IOchander');
   
