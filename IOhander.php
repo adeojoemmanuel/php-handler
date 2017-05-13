@@ -1,6 +1,11 @@
 <?php 
 include('config.php');
+	function autoinclude($class){
+		include($class . ".php");
+	}
+	autoinclude("dbconfig");
 	class IOhandler{	
+		new connect;
 		public function __construct(){
 	 		include('dbconfig.php');
 	 		$db = new connect();
