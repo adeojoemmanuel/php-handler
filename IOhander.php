@@ -1,5 +1,4 @@
 <?php 
-include('config.php');
 	function autoinclude($class){
 		include($class . ".php");
 	}
