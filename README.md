@@ -1,2 +1,2 @@
 # php-handler
-a complete handler for php (crud, start session, end session, mail)
+a mini php handler (crud, start session, end session, mail)
