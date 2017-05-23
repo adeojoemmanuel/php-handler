@@ -124,5 +124,34 @@ include('config.php');
 		    }
 			$DBcon->close();
 		}
+		public function GetClientMac(){
+		    $macAddr=false;
+		    $arp=`arp -n`;
+		    $lines=explode("\n", $arp);
+
+		    foreach($lines as $line){
+		        $cols=preg_split('/\s+/', trim($line));
+
+		        if ($cols[0]==$_SERVER['REMOTE_ADDR']){
+		            $macAddr=$cols[2];
+		        }
+		    }
+		    return $macAddr;
+		}
+		public function my_url(){
+		    $url = (!empty($_SERVER['HTTPS'])) ?
+		               "https://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] :
+		               "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
+		    echo $url;
+		}
+		public function Search($queried){
+			//where queried is the form name gotten from your class use
+			$keys = explode(" ",$queried);
+			$sql = "SELECT * FROM links WHERE name LIKE '%$queried%' ";
+			foreach($keys as $k){
+			    $sql .= " OR name LIKE '%$k%' ";
+			}
+			$result = mysql_query($sql);
+		}
 	}		
 ?>
