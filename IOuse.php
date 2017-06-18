@@ -1,5 +1,5 @@
 <?php
-  funtion load($class){
+  function load($class){
     include($class .".php");
   }
   load('IOchander');

@@ -104,8 +104,8 @@
 			$input=preg_replace("#[^0-9a-z]#i","",$input);
 	    }
 	    
-	    public function login($username, $password, $table, $dbtable){
-		    $query = $DBcon->prepare("SELECT * FROM $table WHERE $dbtable='$username' ORDER BY _userid DESC limit 1");
+	    public function login($username, $password, $table, $dbtable, $orderparams){
+		    $query = $DBcon->prepare("SELECT * FROM $table WHERE $dbtable='$username' ORDER BY $orderparams DESC limit 1");
 		    $vee=$query->execute();
 		    $row=$vee->fetch_array();
 		    $count=$query->num_rows;
@@ -151,6 +151,47 @@
 			    $sql .= " OR name LIKE '%$k%' ";
 			}
 			$result = mysql_query($sql);
+			return $result;
 		}
+		public function uploadImg($table){
+			$upload_image=$_FILES[" myimage "][ "name" ];
+			$folder="images/";
+			move_uploaded_file($_FILES[" myimage "][" tmp_name "], "$folder".$_FILES[" myimage "][" name "]);
+			$insert_path="INSERT INTO $table VALUES($folder,$upload_image)";
+			$var=mysql_query($inser_path);
+		}
+		public function check_match($param1, $param2){
+			if($param1 == $param2)
+				return true;
+			else
+				return false;
+		}
+		private function trow($message){
+			echo json_encode($message);
+		}
+		public function push($code, $message){
+			$response['status'] = $code;
+			$response['message'] = $message;
+			trow($response);
+		}
+
+		public function random_char($char){
+			// where char stands for the string u want to randomize
+			$char_length = 15;
+			$cl = strlen($char);
+			$randstr = '';
+			for($i = 0; $ < $char_length; $i++ ){
+				$randomize .= $char[rand(0, $cl - 1)]; 
+			}
+			return $randomize;
+		}
+		public function random_string($length, $ranges = array('0-9', 'a-z', 'A-Z')) {
+			/*usage for randomize all small letters
+				random_string($l, array('a-z'))
+			*/
+	        foreach ($ranges as $r) $s .= implode(range(array_shift($r = explode('-', $r)), $r[1]));
+	        while (strlen($s) < $length) $s .= $s;
+	        return substr(str_shuffle($s), 0, $length);
+	    }
 	}		
 ?>
