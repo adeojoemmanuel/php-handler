@@ -1,15 +1,11 @@
 <?php 
-	function autoinclude($class){
-		include($class . ".php");
-	}
-	autoinclude("dbconfig");
 	class IOhandler{	
-		new connect;
 		public function __construct(){
 	 		include('dbconfig.php');
 	 		$db = new connect();
         	$this->DBcon = $db->startConn();
 		}
+
 		public function getAll($table){
 			$SQL = "SELECT * from $table";
 			$q = $this->DBcon->query($SQL) or die("Failed");
@@ -18,13 +14,25 @@
 			}
 			return $data;
 		}
-		public function getBy_id($id, $table){
-			$SQL = "SELECT * from $table where _id = :id";
+
+		public function logincheck($username) {
+		    $stmt = $this->DBcon->prepare("SELECT _email, _username FROM _users WHERE _email = :email or _username = :username");
+		    $stmt->execute(array(':email' => $username, ':username' => $username));
+		    if($stmt->rowCount() > 0){
+		        return 'exist';
+		    } else {
+		        return 'notexist';
+		    }
+		}
+
+		public function getBy_id($email, $ref, $table){
+			$SQL = "SELECT * from $table where '_email' = :email and '_act_code' = :ref";
 			$q = $this->DBcon->prepare($SQL);
-			$q->execute(array(':id' => $id));
-			$data = $q->FETCH_ASSOC();
+			$q->execute(array(':email' => $email, ':ref' => $ref));
+			$data = $q->fetch(PDO::FETCH_ASSOC);
 			return $data;
 		}
+
 		public function insert($table, array $fields, array $values) {
 		    $numFields = count($fields);
 		    $numValues = count($values);
@@ -73,13 +81,9 @@
 				$sessid = $_SESSION['id'];
 			}	
 		}
-		public function endSession(){
-			if(!isset($_SESSION['id'])){
-				session_start();
-			}
-	    	if(isset($_SESSION['id'])){
-	    		session_destroy();  
-			}
+		public function endSession($id){
+			session_start();
+	    	session_destroy();  
 	    }
 	    public function sendMail($values = array()){
 	    	$values = '`' . implode ( '`,`', $values ) . '`';
@@ -90,6 +94,16 @@
 		        return false;
 		    }
 	    }
+
+	    public function mail($email, $header, $message, $sender){
+	    	$mail = mail($email, $header, $message, $sender);
+	    	if ($mail) {
+	    		return true;
+	    	}else{
+	    		return false;
+	    	}
+	    }
+
 	    public function checkTableExist($table){
 	    	$sql = "'SHOW TABLES FROM '.$this->dbname.' LIKE '.$table.''";
 	    	if($sql){
@@ -100,6 +114,7 @@
 	            }
 	        }
 	    }
+
 	    public function validateInput($input){
 			$input=preg_replace("#[^0-9a-z]#i","",$input);
 	    }
@@ -179,12 +194,15 @@
 			// where char stands for the string u want to randomize
 			$char_length = 15;
 			$cl = strlen($char);
-			$randstr = '';
-			for($i = 0; $ < $char_length; $i++ ){
+			$randomize = '';
+			for($i = 0; $i < $char_length; $i++ ){
 				$randomize .= $char[rand(0, $cl - 1)]; 
 			}
 			return $randomize;
 		}
+
+	
+
 		public function random_string($length, $ranges = array('0-9', 'a-z', 'A-Z')) {
 			/*usage for randomize all small letters
 				random_string($l, array('a-z'))
@@ -193,5 +211,59 @@
 	        while (strlen($s) < $length) $s .= $s;
 	        return substr(str_shuffle($s), 0, $length);
 	    }
+	    public function reverse_string($str){
+	    	// lol php function for string revers is strrev("Hello world!"); it doess the exact same tin 
+			for($i=1; $i <= strlen($str); $i++) {
+			    return substr($str, $i*-1, 1);
+			}
+	    }
+
+	    public function query($q){
+			if($this->DBcon->query($q)){
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		public function getOne($query){
+			$final = $this->DBcon->prepare($query. ' LIMIT 1');
+			$final->execute();
+			$data = $final->fetch(PDO::FETCH_ASSOC);
+			return $data;
+		}
+
+		public function run_query($q){
+			if($this->DBcon->query($q)){
+				return true;
+			} else {
+				return false;
+			};
+
+		}
+
+		public function stringify($item){
+		    return (string)$item;
+		}
+
+		public function isExist($id, $table, $item){
+			$stmt = $this->DBcon->prepare("SELECT * FROM $table WHERE $item = :val");
+		    $stmt->execute(array(':val' => $id));
+		    if($stmt->rowCount() > 0){
+		        return 'exist';
+		    } else {
+		        return 'notexist';
+		    }
+		}
+
+		public function usernameCheck($email) {
+		    $stmt = $this->DBcon->prepare("SELECT _email FROM _users WHERE _email = :email");
+		    $stmt->execute(array(':email' => $email));
+		    if($stmt->rowCount() > 0){
+		        return 'exist';
+		    } else {
+		        return 'notexist';
+		    }
+		}
 	}		
 ?>
