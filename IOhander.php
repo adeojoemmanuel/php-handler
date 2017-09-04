@@ -53,6 +53,7 @@
 		    }
 		    return false;
 		}
+		
 		public function update($table,$values=array(),$where){
             $args=array();
 			foreach($values as $field=>$value){
@@ -67,12 +68,14 @@
    			}
    			return false;
     	}
+
 		public function deleteData($id, $table){
 			$SQL = "DELETE from $table where _id = :id";
 			$q = $this->DBcon->prepare($SQL);
 			$q->execute(array(':id' => $id));
 			return true;
 		}
+
 		public function startSession(){
 			if (!isset($_SESSION['id'])) {
 				session_start();
@@ -81,10 +84,12 @@
 				$sessid = $_SESSION['id'];
 			}	
 		}
+
 		public function endSession($id){
 			session_start();
 	    	session_destroy();  
 	    }
+
 	    public function sendMail($values = array()){
 	    	$values = '`' . implode ( '`,`', $values ) . '`';
 		    $mail_status = mail($values);
@@ -152,12 +157,14 @@
 		    }
 		    return $macAddr;
 		}
+
 		public function my_url(){
 		    $url = (!empty($_SERVER['HTTPS'])) ?
 		               "https://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] :
 		               "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
 		    echo $url;
 		}
+
 		public function Search($queried){
 			//where queried is the form name gotten from your class use
 			$keys = explode(" ",$queried);
@@ -168,22 +175,26 @@
 			$result = mysql_query($sql);
 			return $result;
 		}
+
 		public function uploadImg($table){
-			$upload_image=$_FILES[" myimage "][ "name" ];
+			$upload_image=$_FILES["myimage"][ "name" ];
 			$folder="images/";
 			move_uploaded_file($_FILES[" myimage "][" tmp_name "], "$folder".$_FILES[" myimage "][" name "]);
 			$insert_path="INSERT INTO $table VALUES($folder,$upload_image)";
 			$var=mysql_query($inser_path);
 		}
+
 		public function check_match($param1, $param2){
-			if($param1 == $param2)
+			if($param1 === $param2)
 				return true;
 			else
 				return false;
 		}
-		private function trow($message){
+
+		public function trow_encode($message){
 			echo json_encode($message);
 		}
+
 		public function push($code, $message){
 			$response['status'] = $code;
 			$response['message'] = $message;
@@ -211,6 +222,7 @@
 	        while (strlen($s) < $length) $s .= $s;
 	        return substr(str_shuffle($s), 0, $length);
 	    }
+
 	    public function reverse_string($str){
 	    	// lol php function for string revers is strrev("Hello world!"); it doess the exact same tin 
 			for($i=1; $i <= strlen($str); $i++) {
@@ -218,13 +230,6 @@
 			}
 	    }
 
-	    public function query($q){
-			if($this->DBcon->query($q)){
-				return true;
-			} else {
-				return false;
-			}
-		}
 
 		public function getOne($query){
 			$final = $this->DBcon->prepare($query. ' LIMIT 1');
@@ -264,6 +269,20 @@
 		    } else {
 		        return 'notexist';
 		    }
+		}
+
+		public function validate($fields){
+			// $fields = array('subject', 'email', 'phone', 'message');
+			$error = false; 
+			foreach($fields AS $fieldname) { 
+			  if(!isset($_POST[$fieldname]) || empty($_POST[$fieldname])) {
+			    echo 'Field '.$fieldname.' missing!<br />';
+			    $error = true; //Yup there are errors
+			  }else{
+			  	$error = false;
+			  }
+			}
+			return $error;
 		}
 	}		
 ?>
