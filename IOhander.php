@@ -55,7 +55,7 @@
 		}
 		
 		public function update($table,$values=array(),$where){
-            $args=array();
+            		$args=array();
 			foreach($values as $field=>$value){
 				$args[]=$field.'="'.$value.'"';
 			}
@@ -67,7 +67,7 @@
    				}
    			}
    			return false;
-    	}
+    		}
 
 		public function deleteData($id, $table){
 			$SQL = "DELETE from $table where _id = :id";
@@ -199,9 +199,9 @@
 			$response['status'] = $code;
 			$response['message'] = $message;
 			trow($response);
-		}
+	     }
 
-		public function random_char($char){
+	     public function random_char($char){
 			// where char stands for the string u want to randomize
 			$char_length = 15;
 			$cl = strlen($char);
@@ -210,11 +210,11 @@
 				$randomize .= $char[rand(0, $cl - 1)]; 
 			}
 			return $randomize;
-		}
+	     }
 
 	
 
-		public function random_string($length, $ranges = array('0-9', 'a-z', 'A-Z')) {
+	    public function random_string($length, $ranges = array('0-9', 'a-z', 'A-Z')) {
 			/*usage for randomize all small letters
 				random_string($l, array('a-z'))
 			*/
@@ -231,27 +231,27 @@
 	    }
 
 
-		public function getOne($query){
-			$final = $this->DBcon->prepare($query. ' LIMIT 1');
-			$final->execute();
-			$data = $final->fetch(PDO::FETCH_ASSOC);
-			return $data;
-		}
+	    public function getOne($query){
+		$final = $this->DBcon->prepare($query. ' LIMIT 1');
+		$final->execute();
+		$data = $final->fetch(PDO::FETCH_ASSOC);
+		return $data;
+	    }
 
-		public function run_query($q){
-			if($this->DBcon->query($q)){
-				return true;
-			} else {
-				return false;
-			};
+	    public function run_query($q){
+		if($this->DBcon->query($q)){
+		     return true;
+		} else {
+		    return false;
+		};
 
-		}
+	    }
 
-		public function stringify($item){
-		    return (string)$item;
-		}
+	    public function stringify($item){
+		 return (string)$item;
+	    }
 
-		public function isExist($id, $table, $item){
+	    public function isExist($id, $table, $item){
 			$stmt = $this->DBcon->prepare("SELECT * FROM $table WHERE $item = :val");
 		    $stmt->execute(array(':val' => $id));
 		    if($stmt->rowCount() > 0){
@@ -259,9 +259,9 @@
 		    } else {
 		        return 'notexist';
 		    }
-		}
+	    }
 
-		public function usernameCheck($email) {
+	    public function usernameCheck($email) {
 		    $stmt = $this->DBcon->prepare("SELECT _email FROM _users WHERE _email = :email");
 		    $stmt->execute(array(':email' => $email));
 		    if($stmt->rowCount() > 0){
