@@ -1,14 +1,12 @@
 <?php
 
-  /**
-   * Contains all configurations
-   *
-   */
-  return [
-    'dbname' => '',
-    'pass' => '',
-    'username' => '',
-    'host' => '',
-  ];
+define('DB_HOST', 'localhost');
+define('DB_USERNAME', 'root'); //database username
+define('DB_PASSWORD', '');  // database password
+define('DB_DATABASE', ''); // database name
+
+define('SMTP_USER', 'your_smtp_user_name');
+define('SMTP_PASSWORD', 'your_smtp_user_password');
+define('HOST', 'your_host_name');
 
 ?>
