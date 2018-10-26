@@ -98,22 +98,6 @@ class Utility {
 		}
 	}
 
-	public function isin($param, $query) {
-		// SELECT * FROM $table WHERE email = :email
-		try {
-			$stmt = $this->DBcon->prepare($query);
-			$stmt->execute(array(':param' => $param));
-			$res = $stmt->fetch(PDO::FETCH_ASSOC);
-			if($stmt->rowCount() > 0){
-			    return $res;
-			}else{
-			    return NULL;
-			}
-		} catch(PDOException $ex) {
-			return NULL;
-		}
-	}
-
 	public function insert($table, array $fields, array $values) {
 	    $numFields = count($fields);
 	    $numValues = count($values);

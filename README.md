@@ -21,7 +21,8 @@ edit config.php and insert nessesary configuration
 
 ## Usage example
 
-their are 5 classes in the function.php
+their are 5 classes in the function.php 
+---
 	- Utility
 	- paginate
 	- Auth
