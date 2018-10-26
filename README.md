@@ -46,11 +46,11 @@ new Utility
 Adeojo Emmanuel – [@imm__immanuel](https://twitter.com/imm__immanuel) – emmanuel.adeojo.ibk@gmail.com
 
 
-[https://github.com/adeojoemmanuel/free-port](https://github.com/adeojoemmanuel/)
+[https://github.com/adeojoemmanuel/php-handler](https://github.com/adeojoemmanuel/php-handler)
 
 ## Contributing
 
-1. Fork it (<https://github.com/adeojoemmanuel/free-port/fork>)
+1. Fork it (<https://github.com/adeojoemmanuel/php-handler/fork>)
 2. Create your feature branch (`git checkout -b feature/fooBar`)
 3. Commit your changes (`git commit -am 'Add some fooBar'`)
 4. Push to the branch (`git push origin feature/fooBar`)
