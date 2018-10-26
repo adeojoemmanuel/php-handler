@@ -118,18 +118,6 @@ class Utility {
 	        }
 	    }
 	}
-
-	public function isAuth () {
-		if(isset($_SESSION['user_id'])) {
-			return $_SESSION['user_id'];
-		}else {
-			return NULL;
-		}
-	}
-
-	public static function redirect ($url) {
-		header("Location: $url");
-	}
 }
 
 // used to paginate data
@@ -212,6 +200,18 @@ class Auth extends Utility{
 	function __construct() {
 		parent::__construct();
 		require_once 'hashing.php';
+	}
+
+	public function isAuth () {
+		if(isset($_SESSION['user_id'])) {
+			return $_SESSION['user_id'];
+		}else {
+			return NULL;
+		}
+	}
+
+	public static function redirect ($url) {
+		header("Location: $url");
 	}
 
 	public function justkill($sessParams) {
