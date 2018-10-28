@@ -299,56 +299,29 @@ class Auth extends Utility{
 	    	if ( $stmt->rowCount() > 0 ) {
 	    		if(passwordHash::check_password($res['password'], $password)){
 	    			session_start();
-    				$_SESSION['user_id'] = $res['_id'];
-		    		$_SESSION['email'] = $res['email'];
-		    		$_SESSION['timestamp']=time();
-		    		$this->redirect('./../../products.php');
+    				$user_id = $res['_id'];
+					$email = $res['email'];
+		    		$timestamp = time();
+		    		$userSess = array($user_id, $email, $timestamp);
+		    		return $userSess;
 	    		}else{
 	    			//wrong password
-	    			$_SESSION['message'] = "wrong password";
-					$_SESSION['messagetype'] ="alert alert-danger";
-					$this->redirect('./../../login.php');
+	    			$message = "wrong password";
+					$messagetype = "alert alert-danger";
+					$userMsg = array($message, $messagetype);
+					return $userMsg;
 		    	} 
 		    }else {
 	    		//user does not exist
-    			$_SESSION['message'] = "User does not exist";
-				$_SESSION['messagetype'] ="alert alert-danger";
-				$this->redirect('./../../login.php');
-	    		exit;
+    			$message = "User does not exist";
+				$messagetype = "alert alert-danger";
+				$userMsg = array($message, $messagetype);
+			    return $userMsg;
 	    	}
 		}catch (PDOException $ex) {
 			echo "PDO did not work";
 		}
 	}
-
-	public function activelogin($email, $password, $table) {
-		try {
-			$stmt = $this->DBcon->prepare("SELECT _id, email,password FROM $table WHERE (email=:email)"); 
-		    $stmt->bindParam(':email', $email);
-			$stmt->execute();
-			$res = $stmt->fetch(PDO::FETCH_ASSOC);
-	    	if ( $stmt->rowCount() > 0 ) {
-	    		if(passwordHash::check_password($res['password'], $password)){
-	    			if (session_status() == PHP_SESSION_NONE) {
-					    session_start();
-					}
-    				$_SESSION['user_id'] = $res['_id'];
-		    		$_SESSION['email'] = $res['email'];
-		    		$_SESSION['timestamp']=time();
-		    		// $res = json_encode("success");
-		    		return "success";
-	    		}else{
-	    			return "wrong_password";
-		    	} 
-		    }else {
-	    		//user does not exist
-    			return "User_not_exist";
-	    	}
-		}catch (PDOException $ex) {
-			return "PDO did not work";
-		}
-	}
-	
 
 	//function to activate an account
 	public function verify($id, $token){
