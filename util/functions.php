@@ -56,21 +56,21 @@ class Utility {
 
 
 
-	public function getatrand($table){
+	public function getAllAtRand($table){
 		$r = $this->DBcon->prepare("SELECT * FROM $table order by RAND() LIMIT 1");
 		$r->execute();
 		$message = $r->fetch();
 		return $message;
 	}
 
-	public function searchproduct($string){
+	public function searchproduct($string, $table){
 		$keywords = explode(' ', $string);
 		foreach($keywords as $words) {
 				$searchTermKeywords[] = "title LIKE '%$words%'";
 				$searchTermKeywords2[] = "description LIKE '%$words%'";
 		}
 		// $sql = "select title from products where title like '%$string%'";
-		$sql = "Select * from products where ".implode(' AND ', $searchTermKeywords)." or ".implode(' AND ', $searchTermKeywords2)." limit 10";
+		$sql = "Select * from $table where ".implode(' AND ', $searchTermKeywords)." or ".implode(' AND ', $searchTermKeywords2)." limit 10";
 		$r = $this->DBcon->prepare($sql);
 		$r->execute();
 		$message = $r->fetchall();
